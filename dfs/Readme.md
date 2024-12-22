@@ -1,93 +1,93 @@
-Shortest Path Finder (DFS)
-Project Description
-This project is a full-stack application that calculates the shortest path between two points on a 20x20 grid using the Depth-First Search (DFS) algorithm. The grid is displayed on the frontend using React.js, and the shortest path is calculated and returned by a Go backend. The path is then visually represented on the frontend.
+# Shortest Path Finder Backend (DFS)
 
-Key Features:
-Interactive Grid Layout: A 20x20 grid with clickable cells.
-Tile Selection: Users can select a start and end point, and the backend calculates the shortest path.
-Path Visualization: The path is displayed on the frontend with a different color once calculated by the backend.
-API Interaction: The frontend communicates with the backend via HTTP requests to calculate and display the shortest path.
-Frontend Requirements
-Grid Layout:
+## vProject Description
 
-Create a 20x20 grid (400 cells) using a frontend framework such as React.js.
-Each grid cell is clickable and can be selected as either the start or end point.
-Tile Selection:
+This is the backend implementation of a full-stack application that calculates the shortest path between two points on a 20x20 grid using the Depth-First Search (DFS) algorithm. It provides an API to receive the start and end points, calculates the path, and returns it as a list of grid coordinates.
 
-Allow the user to select exactly two tiles: one for the start point and one for the end point.
-These selected tiles should be visually distinguishable from the other cells.
-Path Display:
+# Backend Requirements:
 
-Once the shortest path is calculated, highlight the path between the start and end points with a different color (e.g., blue).
-API Interaction:
+Go server that exposes an API to calculate the shortest path using DFS.
+DFS Algorithm implemented to find the shortest path between two points on the grid.
+The backend should return the calculated path as a list of grid coordinates.
 
-Upon selecting the start and end points, send the coordinates to the backend via an HTTP request.
-Receive the calculated path from the backend, which will be a list of grid coordinates.
-Visualize the path by coloring the appropriate cells in the grid.
-Backend Requirements (Golang)
-API Setup:
+## API Endpoint
 
-Implement a Go server to handle requests from the frontend.
-Create an API endpoint (e.g., /find-path) that receives the start and end coordinates and responds with the calculated path.
-DFS Algorithm:
+POST /find-path
+Request:
 
-Implement the Depth-First Search (DFS) algorithm to calculate the shortest path between the selected start and end points on the grid.
-Ensure the DFS algorithm can handle a 2D grid.
-Response Format:
+The frontend sends a POST request to the /find-path endpoint with the following payload:
 
-The backend should return the shortest path as a list of grid coordinates from the start to the end tile.
-API Example
-Request (via curl)
-To test the backend, you can use curl to send a POST request to the /find-path endpoint with a grid, start, and end points:
+`{
+  "grid": [
+    [1, 1, 0, 0, 0],
+    [1, 1, 0, 1, 1],
+    [0, 1, 1, 1, 0],
+    [0, 0, 0, 1, 1],
+    [1, 1, 1, 1, 1]
+  ],
+  "start": [0, 0],
+  "end": [4, 4]
+}`
 
-bash
-Copy code
-curl --location 'http://localhost:8080/find-path' \
+grid: A 2D array representing the grid where 1 represents an open cell and 0 represents a blocked cell.
+start: The starting point coordinates [x1, y1].
+end: The ending point coordinates [x2, y2].
+
+## Response:
+
+The server will return a JSON response containing the path from the start point to the end point:
+
+`{
+  "path": [
+    [0, 0],
+    [0, 1],
+    [1, 1],
+    [2, 1],
+    [2, 2],
+    [2, 3],
+    [3, 3],
+    [3, 4],
+    [4, 4]
+  ]
+}
+`
+
+path: An array of coordinates representing the shortest path between the start and end points.
+
+# Running the Backend
+
+1. Initialize Go Module
+   To initialize the Go module for the project, run the following command:
+
+`go mod init dfs`
+
+`go mod tidy`
+
+`go run main.go`
+
+# 4. Test the API
+
+To test the backend functionality, you can use curl or any HTTP client like Postman. Here's an example using curl:
+
+`curl --location 'http://localhost:8080/find-path' \
 --header 'Content-Type: application/json' \
 --data '{
-"grid": [
-[1, 1, 0, 0, 0],
-[1, 1, 0, 1, 1],
-[0, 1, 1, 1, 0],
-[0, 0, 0, 1, 1],
-[1, 1, 1, 1, 1]
-],
-"start": [0, 0],
-"end": [4, 4]
-}'
-Example Response
-The backend will respond with the calculated path in the following format:
+  "grid": [
+    [1, 1, 0, 0, 0],
+    [1, 1, 0, 1, 1],
+    [0, 1, 1, 1, 0],
+    [0, 0, 0, 1, 1],
+    [1, 1, 1, 1, 1]
+  ],
+  "start": [0, 0],
+  "end": [4, 4]
+}'`
 
-json
-Copy code
-{
-"path": [
-[0, 0],
-[0, 1],
-[1, 1],
-[2, 1],
-[2, 2],
-[2, 3],
-[3, 3],
-[3, 4],
-[4, 4]
-]
-}
-Running the Application
-Backend (Go)
-Initialize the Go Module: First, initialize the Go module if you haven't already:
+# DFS Algorithm (Backend)
 
-bash
-Copy code
-go mod init dfs
-Install Dependencies: Run the following command to tidy up the Go module and install dependencies:
+The DFS algorithm is implemented in the backend to search for the shortest path between the start and end coordinates in the grid.
 
-bash
-Copy code
-go mod tidy
-Run the Backend: To start the Go backend, run the following command:
-
-bash
-Copy code
-go run main.go
-The backend will start running on http://localhost:8080.
+Key Points:
+DFS Search explores paths from the start point, checking neighboring cells recursively.
+It ensures to avoid revisiting already visited cells or blocked cells (cells with 0).
+The algorithm backtracks once a valid path to the end point is found.
